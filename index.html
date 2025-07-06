@@ -226,9 +226,27 @@
         Copyright &copy; Corral Solutions LLC 2025
       </div>
     </footer>
-    <!-- Bootstrap core JS-->
+    <!-- Custom Scheme (if Universal Link / App Link doesn't work) -->
+    <script>
+      // function to check if the user is on a mobile or tablet device
+      function isMobileOrTablet() {
+        const userAgent =
+          navigator.userAgent || navigator.vendor || window.opera;
+        return /android|iphone|ipad|ipod/i.test(userAgent);
+      }
+      // get the reset_password_token from the URL
+      const params = new URLSearchParams(window.location.search);
+      const resetPasswordToken = params.get("reset_password_token");
+
+      // update the app link with the token if it exists & the user is on a mobile or tablet device
+      if (resetPasswordToken && isMobileOrTablet()) {
+        const appLink = `corral://confirm-reset?reset_password_token=${resetPasswordToken}`;
+        window.location.href = appLink;
+      }
+    </script>
+    <!-- Bootstrap core JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Core theme JS-->
+    <!-- Core theme JS -->
     <script src="js/scripts.js"></script>
   </body>
 </html>
