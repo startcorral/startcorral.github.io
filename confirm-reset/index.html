@@ -30,21 +30,6 @@
         min-height: 100vh;
         position: relative;
       }
-      .masthead:before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: rgba(
-          0,
-          0,
-          0,
-          0.5
-        ); /* Overlay to make text readable */
-        z-index: 0;
-      }
       .masthead .container {
         z-index: 1; /* Bring content above the overlay */
       }
@@ -105,14 +90,14 @@
             </h2>
             <a
               id="fallback-link"
-              href="#"
+              href="corral://login"
               class="btn btn-primary"
               style="display: none"
-              >Open App / Try Again</a
+              >Open App</a
             >
             <a
               id="return-home-link"
-              href="https://startcorral.github.io/forgot-password"
+              href="corral://forgot-password"
               class="btn btn-secondary mt-3"
               style="display: none"
               >Request a New Link</a
