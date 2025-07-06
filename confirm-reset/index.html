@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta name="description" content="Corral App - Password Reset" />
+    <meta name="author" content="Corral Solutions LLC" />
+    <title>Corral - Password Reset</title>
+    <link rel="icon" type="image/x-icon" href="../assets/favicon.ico" />
+    <script
+      src="https://use.fontawesome.com/releases/v6.3.0/js/all.js"
+      crossorigin="anonymous"
+    ></script>
+    <link
+      href="https://fonts.googleapis.com/css?family=Varela+Round"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+      rel="stylesheet"
+    />
+    <link href="../css/styles.css" rel="stylesheet" />
+    <style>
+      /* Custom styles for this page to override/adjust theme for specific content */
+      .masthead {
+        /* Ensure masthead height fills the viewport for this page */
+        min-height: 100vh;
+        position: relative;
+      }
+      .masthead:before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(
+          0,
+          0,
+          0,
+          0.5
+        ); /* Overlay to make text readable */
+        z-index: 0;
+      }
+      .masthead .container {
+        z-index: 1; /* Bring content above the overlay */
+      }
+      .text-white-50 {
+        color: rgba(
+          255,
+          255,
+          255,
+          0.7
+        ) !important; /* Ensure visibility on dark background */
+      }
+      .btn-primary {
+        background-color: #64a19d; /* Match Grayscale theme primary button color */
+        border-color: #64a19d;
+      }
+      .btn-primary:hover {
+        background-color: #558b88; /* Darker hover */
+        border-color: #558b88;
+      }
+      .btn-secondary {
+        background-color: #000; /* Black button for "request new" */
+        border-color: #000;
+        color: white;
+      }
+      .btn-secondary:hover {
+        background-color: #333;
+        border-color: #333;
+      }
+      .small-text-message {
+        font-size: 1.1rem;
+        line-height: 1.5;
+      }
+    </style>
+  </head>
+  <body id="page-top">
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+      <div class="container px-4 px-lg-5">
+        <a class="navbar-brand" href="https://startcorral.github.io"
+          >Start Corral</a
+        >
+      </div>
+    </nav>
+
+    <header class="masthead">
+      <div
+        class="container px-4 px-lg-5 d-flex h-100 align-items-center justify-content-center"
+      >
+        <div class="d-flex justify-content-center">
+          <div class="text-center">
+            <h1 class="mx-auto my-0 text-uppercase text-white">
+              Password Reset
+            </h1>
+            <h2
+              class="text-white-50 mx-auto mt-2 mb-4 small-text-message"
+              id="status-message"
+            >
+              Attempting to open your Corral app to reset your password...
+            </h2>
+            <a
+              id="fallback-link"
+              href="#"
+              class="btn btn-primary"
+              style="display: none"
+              >Open App / Try Again</a
+            >
+            <a
+              id="return-home-link"
+              href="https://startcorral.github.io/forgot-password"
+              class="btn btn-secondary mt-3"
+              style="display: none"
+              >Request a New Link</a
+            >
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <footer class="footer bg-black small text-center text-white-50">
+      <div class="container px-4 px-lg-5">
+        Copyright &copy; Corral Solutions LLC 2025
+      </div>
+    </footer>
+
+    <script type="text/javascript">
+      // Function to check if the user is on a mobile or tablet device
+      // (Simplified - modern browsers handle custom schemes more gracefully on desktop now)
+      function isMobileOrTablet() {
+        const userAgent =
+          navigator.userAgent || navigator.vendor || window.opera;
+        return /android|iphone|ipad|ipod/i.test(userAgent);
+      }
+
+      document.addEventListener("DOMContentLoaded", function () {
+        const urlParams = new URLSearchParams(window.location.search);
+        const resetPasswordToken = urlParams.get("reset_password_token"); // Corrected parameter name
+
+        const statusMessageDiv = document.getElementById("status-message");
+        const fallbackLinkBtn = document.getElementById("fallback-link");
+        const requestNewLinkBtn = document.getElementById("return-home-link");
+
+        if (resetPasswordToken) {
+          const appLink = `corral://confirm-reset?reset_password_token=${resetPasswordToken}`;
+
+          // Attempt to open the app via custom scheme immediately
+          // This is the primary fallback if Universal Link failed
+          window.location.href = appLink;
+
+          // Set a timeout to display fallback message/button if app doesn't open
+          setTimeout(() => {
+            if (statusMessageDiv) {
+              statusMessageDiv.textContent =
+                "If your app didn't open automatically, please click 'Open App' below. If you're still having trouble, you might need to download the app or request a new link.";
+            }
+            if (fallbackLinkBtn) {
+              fallbackLinkBtn.style.display = "inline-block"; // Show the button
+              fallbackLinkBtn.href = appLink; // Make the button re-attempt the custom scheme
+            }
+            if (requestNewLinkBtn) {
+              requestNewLinkBtn.style.display = "inline-block"; // Show option to request new link
+            }
+            // You might also add a direct link to App Store/Play Store here
+            // if (!isMobileOrTablet()) {
+            //     statusMessageDiv.textContent += "<br/>On desktop, please ensure you have the app installed or try requesting a new link from a mobile device.";
+            // }
+          }, 1500); // Wait 1.5 seconds
+        } else {
+          // No token found scenario
+          if (statusMessageDiv) {
+            statusMessageDiv.textContent =
+              "Error: No password reset token found. This link may be invalid or incomplete.";
+            statusMessageDiv.classList.add("text-danger"); // Add a red text class for errors
+          }
+          if (requestNewLinkBtn) {
+            requestNewLinkBtn.style.display = "inline-block"; // Always offer to request a new link if token is missing
+          }
+        }
+      });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/scripts.js"></script>
+  </body>
+</html>
